@@ -32,10 +32,9 @@ class ViewController: UIViewController {
     
     let textSignal: RACSignal = usernameTextField.rac_textSignal()
     
-    textSignal.subscribeNext {
-      (text: AnyObject!) -> Void in
-      let textString = text as String
-      println(textString)
+    textSignal.subscribeNextAs {
+      (text: String) -> () in
+      println(text)
     }
   }
   
