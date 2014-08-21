@@ -29,6 +29,14 @@ class ViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    let textSignal: RACSignal = usernameTextField.rac_textSignal()
+    
+    textSignal.subscribeNext {
+      (text: AnyObject!) -> Void in
+      let textString = text as String
+      println(textString)
+    }
   }
   
   // MARK: implementation
