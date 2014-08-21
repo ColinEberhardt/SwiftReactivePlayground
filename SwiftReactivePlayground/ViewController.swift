@@ -32,10 +32,13 @@ class ViewController: UIViewController {
     
     let textSignal: RACSignal = usernameTextField.rac_textSignal()
     
-    textSignal.subscribeNextAs {
-      (text: String) -> () in
-      println(text)
-    }
+    textSignal.subscribeNextAs({ (text: String) in
+        println(text)
+      }, error: { (error) in
+        // ...
+      }, completed: {
+        // ...
+      })
   }
   
   // MARK: implementation
