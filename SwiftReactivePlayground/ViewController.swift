@@ -30,19 +30,17 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    usernameTextField.rac_textSignal()
-      .mapAs {
-        (text: NSString) -> NSNumber in
-        return text.length
-      }.filterAs {
-        (number: NSNumber) -> Bool in
-        return number > 3
-      }.subscribeNextAs {
-        (length: NSNumber) in
-        println(length)
+    let validUsernameSignal = usernameTextField.rac_textSignal()
+      .mapAs { (text: NSString) -> NSNumber in
+        return self.isValidUsername(text)
       }
+    
+    validUsernameSignal.mapAs {
+      (valid: NSNumber) -> UIColor in
+      return valid.boolValue ? UIColor.clearColor() : UIColor.yellowColor()
+    }.setKeyPath("backgroundColor", onObject: usernameTextField)
   }
-  
+
   // MARK: implementation
 
   private func isValidUsername(username: String) -> Bool {
