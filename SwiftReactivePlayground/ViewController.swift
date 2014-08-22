@@ -31,14 +31,16 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     
     let textSignal: RACSignal = usernameTextField.rac_textSignal()
+
+    let filteredText = textSignal.filterAs {
+      (text: NSString) -> Bool in
+      return text.length > 3
+    }
     
-    textSignal.subscribeNextAs({ (text: String) in
-        println(text)
-      }, error: { (error) in
-        // ...
-      }, completed: {
-        // ...
-      })
+    filteredText.subscribeNextAs {
+      (text: String) in
+      println(text)
+    }
   }
   
   // MARK: implementation
