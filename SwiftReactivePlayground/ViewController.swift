@@ -30,22 +30,17 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let textSignal: RACSignal = usernameTextField.rac_textSignal()
-
-    let textLength = textSignal.mapAs {
-      (text: NSString) -> NSNumber in
-      return text.length
-    }
-    
-    let filteredText = textLength.filterAs {
-      (number: NSNumber) -> Bool in
-      return number > 3
-    }
-    
-    filteredText.subscribeNextAs {
-      (length: NSNumber) in
-      println(length)
-    }
+    usernameTextField.rac_textSignal()
+      .mapAs {
+        (text: NSString) -> NSNumber in
+        return text.length
+      }.filterAs {
+        (number: NSNumber) -> Bool in
+        return number > 3
+      }.subscribeNextAs {
+        (length: NSNumber) in
+        println(length)
+      }
   }
   
   // MARK: implementation
