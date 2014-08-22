@@ -61,11 +61,15 @@ class ViewController: UIViewController {
     }
 
     signInButton.rac_signalForControlEvents(.TouchUpInside)
-      .flattenMap {
+      .doNext {
+        (any) in
+        self.signInButton.enabled = false;
+      }.flattenMap {
         (any) -> RACSignal in
         self.signInSignal()
       }.subscribeNextAs {
         (success: NSNumber) in
+        self.signInButton.enabled = true;
         self.handleSignInResult(success.boolValue)
       }
   }
