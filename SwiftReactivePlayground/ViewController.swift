@@ -64,10 +64,19 @@ class ViewController: UIViewController {
       .flattenMap {
         (any) -> RACSignal in
         self.signInSignal()
-      }.subscribeNext {
-        (any) in
-        println(any)
+      }.subscribeNextAs {
+        (success: NSNumber) in
+        self.handleSignInResult(success.boolValue)
       }
+  }
+
+  func handleSignInResult(success: Bool) {
+    if success {
+      self.performSegueWithIdentifier("signInSuccess", sender: self)
+    } else {
+      UIAlertView(title: "Sign in failure", message: "try harder next time ;-)",
+        delegate: nil, cancelButtonTitle: "OK").show()
+    }
   }
 
   // MARK: implementation
