@@ -35,10 +35,10 @@ class ViewController: UIViewController {
         return self.isValidUsername(text)
       }
     
-    validUsernameSignal.mapAs {
-      (valid: NSNumber) -> UIColor in
-      return valid.boolValue ? UIColor.clearColor() : UIColor.yellowColor()
-    }.setKeyPath("backgroundColor", onObject: usernameTextField)
+    RAC(usernameTextField, "backgroundColor") << validUsernameSignal.mapAs {
+        (valid: NSNumber) -> UIColor in
+        return valid.boolValue ? UIColor.clearColor() : UIColor.yellowColor()
+      }
   }
 
   // MARK: implementation
