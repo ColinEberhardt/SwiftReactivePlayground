@@ -60,18 +60,21 @@ class ViewController: UIViewController {
       self.signInButton.enabled = active
     }
 
-    signInButton.rac_signalForControlEvents(.TouchUpInside)
-      .doNext {
-        (any) in
-        self.signInButton.enabled = false;
-      }.flattenMap {
+    let signUpCommand = RACCommand(enabled: signUpActiveSignal) {
+      (any) -> RACSignal in
+      return self.signInSignal()
+    }
+
+    signUpCommand.executionSignals
+      .flattenMap {
         (any) -> RACSignal in
-        self.signInSignal()
+        any as RACSignal
       }.subscribeNextAs {
         (success: NSNumber) in
-        self.signInButton.enabled = true;
         self.handleSignInResult(success.boolValue)
       }
+    
+    signInButton.rac_command = signUpCommand
   }
 
   func handleSignInResult(success: Bool) {
