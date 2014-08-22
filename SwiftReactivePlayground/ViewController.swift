@@ -49,6 +49,16 @@ class ViewController: UIViewController {
     RAC(usernameTextField, "backgroundColor") << validUsernameSignal.mapAs(validToBackground)
     
     RAC(passwordTextField, "backgroundColor") << validPasswordSignal.mapAs(validToBackground)
+    
+    let signUpActiveSignal = RACSignalEx.combineLatestAs([validUsernameSignal, validPasswordSignal]) {
+      (validUsername: NSNumber, validPassword: NSNumber) -> NSNumber in
+      return validUsername && validPassword
+    }
+    
+    signUpActiveSignal.subscribeNextAs {
+      (active: NSNumber) in
+      self.signInButton.enabled = active
+    }
   }
 
   // MARK: implementation
