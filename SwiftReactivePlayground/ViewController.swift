@@ -37,7 +37,12 @@ class ViewController: UIViewController {
       return text.length
     }
     
-    textLength.subscribeNextAs {
+    let filteredText = textLength.filterAs {
+      (number: NSNumber) -> Bool in
+      return number > 3
+    }
+    
+    filteredText.subscribeNextAs {
       (length: NSNumber) in
       println(length)
     }
