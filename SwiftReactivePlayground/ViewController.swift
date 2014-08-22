@@ -32,14 +32,14 @@ class ViewController: UIViewController {
     
     let textSignal: RACSignal = usernameTextField.rac_textSignal()
 
-    let filteredText = textSignal.filterAs {
-      (text: NSString) -> Bool in
-      return text.length > 3
+    let textLength = textSignal.mapAs {
+      (text: NSString) -> NSNumber in
+      return text.length
     }
     
-    filteredText.subscribeNextAs {
-      (text: String) in
-      println(text)
+    textLength.subscribeNextAs {
+      (length: NSNumber) in
+      println(length)
     }
   }
   
