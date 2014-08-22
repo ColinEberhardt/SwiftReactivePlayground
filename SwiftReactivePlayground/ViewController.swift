@@ -61,13 +61,32 @@ class ViewController: UIViewController {
     }
 
     signInButton.rac_signalForControlEvents(.TouchUpInside)
-      .subscribeNext {
-        (button) in
-        println("clicked")
+      .map {
+        (any) -> RACSignal in
+        self.signInSignal()
+      }.subscribeNext {
+        (any) in
+        println(any)
       }
   }
 
   // MARK: implementation
+
+  func signInSignal() -> RACSignal {
+    return RACSignal.createSignal {
+      (subscriber) -> RACDisposable! in
+      
+      println("Sign-in initiated")
+      self.signInService.signInWithUsername(self.usernameTextField.text,
+                                  password: self.passwordTextField.text) {
+        (success) in
+        println("Sign-in completed")
+        subscriber.sendNext(success)
+        subscriber.sendCompleted()
+      }
+      return nil
+    }
+  }
 
   private func isValidUsername(username: String) -> Bool {
     return countElements(username) > 3
