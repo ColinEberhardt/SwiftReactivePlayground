@@ -61,7 +61,7 @@ class ViewController: UIViewController {
     }
 
     signInButton.rac_signalForControlEvents(.TouchUpInside)
-      .map {
+      .flattenMap {
         (any) -> RACSignal in
         self.signInSignal()
       }.subscribeNext {
