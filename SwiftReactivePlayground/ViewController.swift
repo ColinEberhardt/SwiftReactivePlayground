@@ -40,9 +40,11 @@ class ViewController: UIViewController {
     
     let validUsernameSignal = usernameTextField.rac_textSignal()
       .mapAs(isValidText(isValidUsername))
+      .distinctUntilChanged()
     
     let validPasswordSignal = passwordTextField.rac_textSignal()
       .mapAs(isValidText(isValidPassword))
+      .distinctUntilChanged()
     
     RAC(usernameTextField, "backgroundColor") << validUsernameSignal.mapAs(validToBackground)
     
