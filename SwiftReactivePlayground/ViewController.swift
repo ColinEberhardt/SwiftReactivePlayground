@@ -59,6 +59,12 @@ class ViewController: UIViewController {
       (active: NSNumber) in
       self.signInButton.enabled = active
     }
+
+    signInButton.rac_signalForControlEvents(.TouchUpInside)
+      .subscribeNext {
+        (button) in
+        println("clicked")
+      }
   }
 
   // MARK: implementation
