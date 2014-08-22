@@ -30,15 +30,23 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    let validUsernameSignal = usernameTextField.rac_textSignal()
-      .mapAs { (text: NSString) -> NSNumber in
-        return self.isValidUsername(text)
-      }
+    func validToBackground(valid: NSNumber) -> UIColor {
+      return valid.boolValue ? UIColor.clearColor() : UIColor.yellowColor()
+    }
     
-    RAC(usernameTextField, "backgroundColor") << validUsernameSignal.mapAs {
-        (valid: NSNumber) -> UIColor in
-        return valid.boolValue ? UIColor.clearColor() : UIColor.yellowColor()
-      }
+    func isValidText(validator:(String) -> Bool)(text: NSString) -> NSNumber {
+      return validator(text)
+    }
+    
+    let validUsernameSignal = usernameTextField.rac_textSignal()
+      .mapAs(isValidText(isValidUsername))
+    
+    let validPasswordSignal = passwordTextField.rac_textSignal()
+      .mapAs(isValidText(isValidPassword))
+    
+    RAC(usernameTextField, "backgroundColor") << validUsernameSignal.mapAs(validToBackground)
+    
+    RAC(passwordTextField, "backgroundColor") << validPasswordSignal.mapAs(validToBackground)
   }
 
   // MARK: implementation
